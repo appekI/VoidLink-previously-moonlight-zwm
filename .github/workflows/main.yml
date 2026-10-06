@@ -1,18 +1,23 @@
 name: Build iOS IPA
 
 on:
-  workflow_dispatch: # Allows you to run this manually anytime
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
-      - name: Checkout Source Code
+      - name: Checkout Main Repository
         uses: actions/checkout@v4
         with:
-          submodules: 'recursive'
-          ref: 'Integration' # Targets VoidLink's active code branch
+          ref: 'Integration'
+
+      - name: Manually Fetch Core Components
+        run: |
+          rm -rf moonlight-common X1Kit
+          git clone --depth 1 https://github.com moonlight-common
+          git clone --depth 1 https://github.com X1Kit
 
       - name: Set up Xcode Version
         run: sudo xcode-select -s /Applications/Xcode.app
